@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/31z4/harvest
     docker:
-      - image: golang:1.8-alpine
+      - image: golang:1.8
     steps:
       - checkout
 
