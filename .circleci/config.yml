@@ -6,4 +6,8 @@ jobs:
       - image: golang:1.8-alpine
     steps:
       - checkout
-      - run: go test -v ./...
+
+      - run: go get github.com/mattn/goveralls
+
+      - run: go test -v -cover -race -coverprofile=coverage.out ./...
+      - run: goveralls -coverprofile=coverage.out -service=circle-ci
