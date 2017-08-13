@@ -3,7 +3,11 @@
 // For information about radix trees, see https://en.wikipedia.org/wiki/Radix_tree.
 package trie
 
-import "strings"
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
 
 type edge struct {
 	node    *node
@@ -124,4 +128,53 @@ func (t *Trie) Insert(s string) {
 // Walk is used to walk the tree edges.
 func (t *Trie) Walk(fn WalkFn) {
 	t.root.walk(fn, []string{})
+}
+
+type edgeData struct {
+	prefix string
+	count  uint
+}
+
+type edgeDataSorter []*edgeData
+
+func (s edgeDataSorter) Len() int {
+	return len(s)
+}
+
+func (s edgeDataSorter) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s edgeDataSorter) Less(i, j int) bool {
+	if s[i].count == s[j].count {
+		return s[i].prefix > s[j].prefix
+	}
+	return s[i].count < s[j].count
+}
+
+// Sprint returns human readable representation of the tree data.
+// This method is computationally expensive because it walks the tree and sorts edge data.
+func (t *Trie) Sprint(count uint) string {
+	edges := []*edgeData{}
+	var total uint
+
+	t.Walk(func(prefix string, count uint) {
+		edges = append(edges, &edgeData{prefix, count})
+		total += count
+	})
+
+	sort.Sort(sort.Reverse(edgeDataSorter(edges)))
+	lines := []string{}
+
+	for i, e := range edges {
+		percent := float32(e.count) * 100 / float32(total)
+		l := fmt.Sprintf("%s: %.2f%% (%d)", e.prefix, percent, e.count)
+		lines = append(lines, l)
+
+		if uint(i+1) == count {
+			break
+		}
+	}
+
+	return strings.Join(lines, "\n")
 }

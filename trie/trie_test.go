@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"testing"
 
+	"strings"
+
 	"github.com/31z4/harvest/trie"
 )
 
@@ -87,8 +89,50 @@ func TestTrie(t *testing.T) {
 
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			if !reflect.DeepEqual(c.edges, result) {
-				t.Errorf("\ncase: %v\nexpected: %v\nresult: %v", c.inserts, c.edges, result)
+				t.Errorf("\ncase: %v\nexpected: %#v\nresult: %#v", c.inserts, c.edges, result)
 			}
 		})
+	}
+}
+
+func TestTrie_Sprint(t *testing.T) {
+	data := []string{"test", "toaster", "toasting", "slow", "slowly"}
+	expected := []string{
+		"t: 27.27% (3)",
+		"slow: 18.18% (2)",
+		"toast: 18.18% (2)",
+		"slowly: 9.09% (1)",
+		"test: 9.09% (1)",
+		"toaster: 9.09% (1)",
+		"toasting: 9.09% (1)",
+	}
+
+	cases := []struct {
+		count  int
+		result string
+	}{
+		{0, strings.Join(expected, "\n")},
+		{len(expected), strings.Join(expected, "\n")},
+		{len(expected) + 1, strings.Join(expected, "\n")},
+		{1, strings.Join(expected[:1], "\n")},
+		{3, strings.Join(expected[:3], "\n")},
+	}
+
+	tree := trie.New()
+
+	result := tree.Sprint(0)
+	if result != "" {
+		t.Errorf("expected empty string, got %#v", result)
+	}
+
+	for _, d := range data {
+		tree.Insert(d)
+	}
+
+	for _, c := range cases {
+		result := tree.Sprint(uint(c.count))
+		if result != c.result {
+			t.Errorf("\ncase: %v\nexpected: %#v\nresult: %#v", c.count, c.result, result)
+		}
 	}
 }
