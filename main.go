@@ -1,11 +1,11 @@
+//+build !test
+
 package main
 
 import (
 	"flag"
 	"fmt"
 	"os"
-
-	"github.com/go-redis/redis"
 )
 
 func main() {
@@ -27,14 +27,9 @@ func main() {
 		os.Exit(2)
 	}
 
-	if *samples == 0 {
-		fmt.Fprintf(os.Stderr, "invalid value \"%v\" for flag -samples: must be > 0\n", *samples)
-		flag.Usage()
-		os.Exit(2)
-	}
-
 	redisUrl := flag.Arg(0)
-	_, err := redis.ParseURL(redisUrl)
+
+	err := Sample(redisUrl, *samples)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

@@ -127,10 +127,12 @@ func TestTrie_Sprint(t *testing.T) {
 		tree.Insert(d)
 	}
 
-	for _, c := range cases {
-		result := tree.Sprint(uint(c.count))
-		if result != c.result {
-			t.Errorf("\ncase: %v\nexpected: %#v\nresult: %#v", c.count, c.result, result)
-		}
+	for i, c := range cases {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			result := tree.Sprint(uint(c.count))
+			if result != c.result {
+				t.Errorf("expected: %#v\nresult: %#v", c.result, result)
+			}
+		})
 	}
 }
