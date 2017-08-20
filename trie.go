@@ -1,7 +1,4 @@
-// Package trie is a very limited radix tree implementation.
-//
-// For information about radix trees, see https://en.wikipedia.org/wiki/Radix_tree.
-package trie
+package main
 
 import (
 	"fmt"
@@ -19,7 +16,9 @@ type node struct {
 	edges []*edge
 }
 
-// Trie represents a radix tree.
+// Trie represents a a very limited radix tree implementation.
+//
+// For information about radix trees, see https://en.wikipedia.org/wiki/Radix_tree.
 type Trie struct {
 	root *node
 }
@@ -74,8 +73,8 @@ func (e *edge) split(length int) {
 	})
 }
 
-// New returns an empty Trie.
-func New() *Trie {
+// NewTrie returns an empty Trie.
+func NewTrie() *Trie {
 	return &Trie{&node{[]*edge{}}}
 }
 

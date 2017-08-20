@@ -9,5 +9,5 @@ jobs:
 
       - run: go get github.com/mattn/goveralls
 
-      - run: make coverage
+      - run: make test
       - run: goveralls -coverprofile=coverage.out -service=circle-ci

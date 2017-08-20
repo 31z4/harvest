@@ -1,4 +1,4 @@
-package trie_test
+package main
 
 import (
 	"reflect"
@@ -6,8 +6,6 @@ import (
 	"testing"
 
 	"strings"
-
-	"github.com/31z4/harvest/trie"
 )
 
 func TestTrie(t *testing.T) {
@@ -81,7 +79,7 @@ func TestTrie(t *testing.T) {
 			result = append(result, prefixData{prefix, count})
 		}
 
-		tree := trie.New()
+		tree := NewTrie()
 		for _, s := range c.inserts {
 			tree.Insert(s)
 		}
@@ -118,7 +116,7 @@ func TestTrie_Sprint(t *testing.T) {
 		{3, strings.Join(expected[:3], "\n")},
 	}
 
-	tree := trie.New()
+	tree := NewTrie()
 
 	result := tree.Sprint(0)
 	if result != "" {
