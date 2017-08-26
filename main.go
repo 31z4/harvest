@@ -1,39 +1,27 @@
-//+build !test
-
 package main
 
 import (
-	"flag"
 	"fmt"
 	"os"
+
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 func main() {
-	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr,
-			"harvest helps you understand what's inside your Redis.\n\n"+
-				"usage: harvest [-samples n] redis_url\n",
-		)
-		flag.PrintDefaults()
-	}
+	kingpin.Version("0.1.0")
+	kingpin.CommandLine.Help = "harvest helps you understand what's inside your Redis."
 
-	samples := flag.Uint("samples", 1000, "number of samples")
+	samples := kingpin.Flag("samples", "maximum number of samples").Short('s').Default("1000").Int()
+	results := kingpin.Flag("results", "maximum number of output results").Short('n').Default("10").Int()
+	redisUrl := kingpin.Arg("url", "redis URL").Default("redis://localhost").String()
 
-	flag.Parse()
+	kingpin.Parse()
 
-	if flag.NArg() != 1 {
-		fmt.Fprintf(os.Stderr, "missing required argument: redis_url\n")
-		flag.Usage()
-		os.Exit(2)
-	}
-
-	redisUrl := flag.Arg(0)
-
-	results, err := Sample(redisUrl, int(*samples))
+	output, err := Sample(*redisUrl, *samples, *results)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
-	fmt.Println(results)
+	fmt.Println(output)
 }
