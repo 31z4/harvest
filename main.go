@@ -29,9 +29,11 @@ func main() {
 
 	redisUrl := flag.Arg(0)
 
-	err := Sample(redisUrl, *samples)
+	results, err := Sample(redisUrl, int(*samples))
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+
+	fmt.Println(results)
 }

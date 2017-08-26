@@ -7,15 +7,27 @@ import (
 )
 
 // Sample samples Redis keys and returns statistics about it.
-func Sample(redisUrl string, samples uint) error {
+func Sample(redisUrl string, samples int) (string, error) {
 	if samples == 0 {
-		return errors.New("number of samples must be > 0")
+		return "", errors.New("number of samples must be > 0")
 	}
 
-	_, err := redis.ParseURL(redisUrl)
+	opt, err := redis.ParseURL(redisUrl)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	trie := NewTrie()
+	client := redis.NewClient(opt)
+
+	for i := 0; i < samples; i++ {
+		key, err := client.RandomKey().Result()
+		if err != nil {
+			return "", err
+		}
+
+		trie.Insert(key)
+	}
+
+	return trie.Sprint(samples), nil
 }

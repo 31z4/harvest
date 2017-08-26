@@ -153,7 +153,7 @@ func (s edgeDataSorter) Less(i, j int) bool {
 
 // Sprint returns human readable representation of the tree data.
 // This method is computationally expensive because it walks the tree and sorts edge data.
-func (t *Trie) Sprint(count uint) string {
+func (t *Trie) Sprint(count int) string {
 	edges := []*edgeData{}
 	var total uint
 
@@ -170,7 +170,7 @@ func (t *Trie) Sprint(count uint) string {
 		l := fmt.Sprintf("%s: %.2f%% (%d)", e.prefix, percent, e.count)
 		lines = append(lines, l)
 
-		if uint(i+1) == count {
+		if i+1 == count {
 			break
 		}
 	}

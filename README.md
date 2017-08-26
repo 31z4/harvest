@@ -4,4 +4,4 @@
 
 # Harvest
 
-Harvest helps you understand what's inside your Redis.
+Harvest helps you understand what's inside your Redis by sampling its keys and returning insightful stats about it.
