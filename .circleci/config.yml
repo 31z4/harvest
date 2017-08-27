@@ -3,11 +3,12 @@ jobs:
   build:
     working_directory: /go/src/github.com/31z4/harvest
     docker:
-      - image: golang:1.8
+      - image: golang:1
+      - image: redis:4-alpine
     steps:
       - checkout
 
       - run: go get github.com/mattn/goveralls
 
-      - run: go test -v -cover -race -coverprofile=coverage.out ./...
+      - run: make test
       - run: goveralls -coverprofile=coverage.out -service=circle-ci

@@ -1,0 +1,6 @@
+*
+
+!vendor
+!Gopkg.*
+!*.go
+!Makefile

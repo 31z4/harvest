@@ -1,7 +1,4 @@
-// Package trie is a very limited radix tree implementation.
-//
-// For information about radix trees, see https://en.wikipedia.org/wiki/Radix_tree.
-package trie
+package main
 
 import (
 	"fmt"
@@ -19,7 +16,9 @@ type node struct {
 	edges []*edge
 }
 
-// Trie represents a radix tree.
+// Trie represents a a very limited radix tree implementation.
+//
+// For information about radix trees, see https://en.wikipedia.org/wiki/Radix_tree.
 type Trie struct {
 	root *node
 }
@@ -74,8 +73,8 @@ func (e *edge) split(length int) {
 	})
 }
 
-// New returns an empty Trie.
-func New() *Trie {
+// NewTrie returns an empty Trie.
+func NewTrie() *Trie {
 	return &Trie{&node{[]*edge{}}}
 }
 
@@ -154,7 +153,7 @@ func (s edgeDataSorter) Less(i, j int) bool {
 
 // Sprint returns human readable representation of the tree data.
 // This method is computationally expensive because it walks the tree and sorts edge data.
-func (t *Trie) Sprint(count uint) string {
+func (t *Trie) Sprint(count int) string {
 	edges := []*edgeData{}
 	var total uint
 
@@ -171,7 +170,7 @@ func (t *Trie) Sprint(count uint) string {
 		l := fmt.Sprintf("%s: %.2f%% (%d)", e.prefix, percent, e.count)
 		lines = append(lines, l)
 
-		if uint(i+1) == count {
+		if i+1 == count {
 			break
 		}
 	}

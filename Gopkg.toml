@@ -1,0 +1,5 @@
+[[constraint]]
+  name = "github.com/go-redis/redis"
+
+[[constraint]]
+  name = "gopkg.in/alecthomas/kingpin.v2"
