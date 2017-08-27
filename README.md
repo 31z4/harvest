@@ -47,4 +47,4 @@ Contributions are greatly appreciated. The maintainers actively manage the issue
 
 ## License
 
-This project is licensed under the GPLv3 License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
