@@ -60,12 +60,12 @@ func TestSample(t *testing.T) {
 		t.Errorf("SET: error: %#v\n", err)
 	}
 
-	output, err = Sample("redis://localhost:6379", 1, 1)
+	output, err = Sample("redis://localhost:6379", 10, 1)
 	if err != nil {
 		t.Errorf("unexpected error: %#v", err)
 	}
 
-	if output != "key: 100.00% (1)" {
+	if output != "key: 100.00% (10)" {
 		t.Errorf("unexpected output: %#v", output)
 	}
 }

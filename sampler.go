@@ -3,6 +3,9 @@ package main
 import (
 	"errors"
 
+	"fmt"
+	"os"
+
 	"github.com/go-redis/redis"
 )
 
@@ -21,8 +24,23 @@ func Sample(redisUrl string, samples, results int) (string, error) {
 		return "", err
 	}
 
-	trie := NewTrie()
 	client := redis.NewClient(opt)
+
+	var dbSize int64
+	dbSize, err = client.DBSize().Result()
+	if err != nil {
+		return "", err
+	}
+
+	if dbSize == 0 {
+		return "", errors.New("the database is empty")
+	}
+
+	if dbSize < int64(samples) {
+		fmt.Fprintf(os.Stderr, "warning: database size (%v) is less than the number of samples (%v)\n\n", dbSize, samples)
+	}
+
+	trie := NewTrie()
 
 	for i := 0; i < samples; i++ {
 		key, err := client.RandomKey().Result()
