@@ -18,7 +18,7 @@ The tool is designed to be simple and efficient. It does not require Redis [`DEB
 Here is an example of how to use `harvest` with Docker and understand its output. Assuming Redis container name is `redis` and it listens on a standard port `6379`.
 
 ```console
-$ docker run --link redis:redis -it --rm harvest redis://redis
+$ docker run --link redis:redis -it --rm 31z4/harvest redis://redis
 warning: database size (12) is less than the number of samples (1000)
 
 _kombu.binding.: 33.98% (648)
@@ -35,7 +35,7 @@ _kombu.binding.celeryev: 4.46% (85)
 
 The first line of the output warns us that the number of samples is greater than the database size. Which basically means that results may be more inaccurate.
 
-The second line tells that from `1000` randomly sampled keys `648` start from `_kombu.binding.` and it's `33.98%` of all samples.
+The second line tells that from `1000` randomly sampled keys `648` start from `_kombu.binding.` and it's `33.98%` of all samples. The rest of the lines follow same pattern.
 
 ## Feedback
 
