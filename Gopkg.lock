@@ -16,8 +16,8 @@
 [[projects]]
   name = "github.com/go-redis/redis"
   packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto"]
-  revision = "19c1c2272e00c1aaa903cf574c746cd449f9cd3c"
-  version = "v6.5.7"
+  revision = "74d5147d860804ea34633071d0c91a7f4b0b5c3a"
+  version = "v6.6.0"
 
 [[projects]]
   name = "gopkg.in/alecthomas/kingpin.v2"
