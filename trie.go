@@ -146,9 +146,9 @@ func (s edgeDataSorter) Swap(i, j int) {
 
 func (s edgeDataSorter) Less(i, j int) bool {
 	if s[i].count == s[j].count {
-		return s[i].prefix > s[j].prefix
+		return s[i].prefix < s[j].prefix
 	}
-	return s[i].count < s[j].count
+	return s[i].count > s[j].count
 }
 
 // Sprint returns human readable representation of the tree data.
@@ -162,7 +162,7 @@ func (t *Trie) Sprint(count int) string {
 		total += count
 	})
 
-	sort.Sort(sort.Reverse(edgeDataSorter(edges)))
+	sort.Sort(edgeDataSorter(edges))
 	lines := []string{}
 
 	for i, e := range edges {
