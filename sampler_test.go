@@ -1,16 +1,11 @@
 package main
 
 import (
-	"os"
 	"strconv"
 	"testing"
 
-	"fmt"
-
 	"github.com/go-redis/redis"
 )
-
-var client = redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 
 func TestSampleArguments(t *testing.T) {
 	cases := []struct {
@@ -50,45 +45,44 @@ func TestSampleArguments(t *testing.T) {
 }
 
 func TestSample(t *testing.T) {
-	output, err := Sample("redis://localhost:6379", 1, 1)
-	if err == nil {
-		t.Errorf("expected an error but got: %#v", output)
-	}
+	var client = redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 
-	err = client.Set("key", "value", 0).Err()
-	if err != nil {
-		t.Errorf("SET: error: %#v\n", err)
-	}
-
-	output, err = Sample("redis://localhost:6379", 10, 1)
-	if err != nil {
-		t.Errorf("unexpected error: %#v", err)
-	}
-
-	if output != "key: 100.00% (10)" {
-		t.Errorf("unexpected output: %#v", output)
-	}
-}
-
-func TestMain(m *testing.M) {
+	// Check is Redis database is empty before running tests
 	dbSize, err := client.DBSize().Result()
 	if err != nil {
-		fmt.Printf("DBSIZE: error: %#v\n", err)
-		os.Exit(1)
+		t.Errorf("DBSIZE: error: %#v\n", err)
 	}
 
 	if dbSize > 0 {
-		fmt.Println("redis database is not empty")
-		os.Exit(1)
+		t.Error("redis database is not empty")
 	}
 
-	returnCode := m.Run()
+	t.Run("empty database", func(t *testing.T) {
+		output, err := Sample("redis://localhost:6379", 1, 1)
+		if err == nil {
+			t.Errorf("expected an error but got: %#v", output)
+		}
+	})
 
+	t.Run("non empty database", func(t *testing.T) {
+		err := client.Set("key", "value", 0).Err()
+		if err != nil {
+			t.Errorf("SET: error: %#v\n", err)
+		}
+
+		output, err := Sample("redis://localhost:6379", 10, 1)
+		if err != nil {
+			t.Errorf("unexpected error: %#v", err)
+		}
+
+		if output != "key: 100.00% (10)" {
+			t.Errorf("unexpected output: %#v", output)
+		}
+	})
+
+	// Flush Redis database after running tests
 	err = client.FlushDB().Err()
 	if err != nil {
-		fmt.Printf("FLUSHDB: error: %#v\n", err)
-		os.Exit(1)
+		t.Errorf("FLUSHDB: error: %#v\n", err)
 	}
-
-	os.Exit(returnCode)
 }
