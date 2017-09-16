@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	kingpin.Version("0.1.0")
+	kingpin.Version("0.1.1")
 	kingpin.CommandLine.Help = "harvest helps you understand what's inside your Redis."
 
 	samples := kingpin.Flag("samples", "Maximum number of samples.").Short('s').Default("1000").Int()
